@@ -121,7 +121,8 @@ function createList()
   {
     const liElement = document.createElement('li');
     ulElement.appendChild(liElement);
-    liElement.textContent = `${Presentation.all[i].imageName} had ${Presentation.all[j].votes} votes, and was seen ${Presentation.all[i].views} times.`;
+    liElement.textContent = `${Presentation.all[j].imageName} had ${Presentation.all[j].votes} votes, and was seen ${Presentation.all[j].views} times.`;
   }
   buttonClick++;
 }
+
