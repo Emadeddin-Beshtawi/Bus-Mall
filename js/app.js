@@ -35,7 +35,7 @@ function randomNum(min,max,length,tryingAllowed)
 
     choice=0;
 
-  for(let i = 0; i<length ; i++)
+  for(let j = 0; j<length ; j++)
   {
     number = Math.floor(Math.random()*(max-min)+min);
     
@@ -45,7 +45,7 @@ function randomNum(min,max,length,tryingAllowed)
       randomNumbers.push(number);
 
     else if(choice && !tryingAllowed)
-      i--;
+      j--;
     else
       randomNumbers.push(number);
   }
@@ -55,7 +55,7 @@ function randomNum(min,max,length,tryingAllowed)
 function Presentation(imageName)
 {
   this.imageName = imageName;
-  this.path = `../img/${this.imageName}.jpg`;
+  this.path = `./img/${this.imageName}.jpg`;
   this.votes = 0;
   this.views = 0;
   Presentation.all.push(this);
@@ -63,12 +63,12 @@ function Presentation(imageName)
 }
 Presentation.all = [];
 
-for(let i = 0 ; i<imgNames.length ; i++)
+for(let j = 0 ; j<imgNames.length ; j++)
 {
-  new Presentation(imgNames[i]);
+  new Presentation(imgNames[j]);
 }
 
-console.table(Presentation.all);
+// console.table(Presentation.all);
 
 function beshtawi()
 {
@@ -117,11 +117,11 @@ function createList()
     return ;
   const ulElement = document.createElement('ul');
   document.getElementById('footer').appendChild(ulElement);
-  for(let i =0 ; i<Presentation.all.length ; i++)
+  for(let j =0 ; j<Presentation.all.length ; j++)
   {
     const liElement = document.createElement('li');
     ulElement.appendChild(liElement);
-    liElement.textContent = `${Presentation.all[i].imageName} had ${Presentation.all[i].votes} votes, and was seen ${Presentation.all[i].views} times.`;
+    liElement.textContent = `${Presentation.all[i].imageName} had ${Presentation.all[j].votes} votes, and was seen ${Presentation.all[i].views} times.`;
   }
   buttonClick++;
 }
