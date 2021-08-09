@@ -1,128 +1,140 @@
 'use strict';
+const images = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
 
-const imgNames = [
-  'banana',
-  'bag',
-  'bathroom',
-  'boots',
-  'bubblegum',
-  'chair',
-  'cthulhu',
-  'dog-duck',
-  'dragon',
-  'pen',
-  'pet-sweep',
-  'scissors'
-];
+const leftImg = document.getElementById('left');
+const centerImg = document.getElementById('center');
+const rightImg = document.getElementById('right');
+const imgSection = document.getElementById('images');
+const buttonResult = document.getElementById('VRB');
+let imageOnLeft;
+let imageOnCenter;
+let imageOnRight;
+let trials = 0;
+let votesArr = [];
+let viewsArr = [];
 
-
-const imgContainer = document.getElementById('container');
-const image1 = document.getElementById('imga');
-const image2 = document.getElementById('imgb');
-const image3 = document.getElementById('imgc');
-
-let imageIndication =[];
-const circles = 5;
-let counterCircles = 0;
-
-function randomNum(min,max,length,tryingAllowed)
-
-{
-  let randomNumbers = [];
-  let number = 0;
-  let choice = 1; 
-  if(max-min < length)
-
-    choice=0;
-
-  for(let j = 0; j<length ; j++)
-  {
-    number = Math.floor(Math.random()*(max-min)+min);
-    
-
-    if(choice && !tryingAllowed && randomNumbers.indexOf(number)===-1)
-
-      randomNumbers.push(number);
-
-    else if(choice && !tryingAllowed)
-      j--;
-    else
-      randomNumbers.push(number);
-  }
-  return randomNumbers;
-}
-
-function Presentation(imageName)
-{
-  this.imageName = imageName;
-  this.path = `./img/${this.imageName}.jpg`;
+function Products(name) {
+  this.name = name;
+  this.image = `./img/${this.name}.jpg`;
   this.votes = 0;
   this.views = 0;
-  Presentation.all.push(this);
-
+  Products.all.push(this);
 }
-Presentation.all = [];
+Products.all = [];
 
-for(let j = 0 ; j<imgNames.length ; j++)
-{
-  new Presentation(imgNames[j]);
-}
 
-// console.table(Presentation.all);
-
-function beshtawi()
-{
-  imageIndication = randomNum(0,imgNames.length-1,3,false);
-  image1.src = Presentation.all[imageIndication[0]].path;
-  Presentation.all[imageIndication[0]].views ++;
-  image2.src = Presentation.all[imageIndication[1]].path;
-  Presentation.all[imageIndication[1]].views ++;
-  image3.src = Presentation.all[imageIndication[2]].path;
-  Presentation.all[imageIndication[2]].views ++;
-
-  
+for (let i = 0; i < images.length; i++) {
+  new Products(images[i]);
 }
 
-beshtawi();
 
-image1.addEventListener('click', function(){pressure(1);});
-image2.addEventListener('click', function(){pressure(2);});
-image3.addEventListener('click', function(){pressure(3);});
+function render() {
 
-function pressure(y)
-{
-  
+  imageOnLeft = randomNumber(0, Products.all.length - 1);
+  imageOnCenter = randomNumber(0, Products.all.length - 1);
+  imageOnRight = randomNumber(0, Products.all.length - 1);
 
-  if(counterCircles<circles)
-  {
-    Presentation.all[imageIndication[y-1]].votes ++ ;
-    beshtawi();
-   
+
+  while (imageOnLeft === imageOnCenter || imageOnLeft === imageOnRight) {
+    imageOnLeft = randomNumber(0, Products.all.length - 1);
   }
-  counterCircles++;
-  if(counterCircles === circles )
-  {
 
-    document.getElementById('VRB').style.display = 'block';
+  leftImg.src = Products.all[imageOnLeft].image;
+  leftImg.alt = Products.all[imageOnLeft].name;
+  leftImg.title = Products.all[imageOnLeft].name;
+  Products.all[imageOnLeft].views++;
+
+  while (imageOnCenter === imageOnRight || imageOnCenter === imageOnLeft) {
+    imageOnCenter = randomNumber(0, Products.all.length - 1);
   }
-  
+
+  centerImg.src = Products.all[imageOnCenter].image;
+  centerImg.alt = Products.all[imageOnCenter].name;
+  centerImg.title = Products.all[imageOnCenter].name;
+  Products.all[imageOnCenter].views++;
+
+  while (imageOnRight === imageOnCenter || imageOnRight === imageOnLeft) {
+    imageOnRight = randomNumber(0, Products.all.length - 1);
+  }
+  rightImg.src = Products.all[imageOnRight].image;
+  rightImg.alt = Products.all[imageOnRight].name;
+  rightImg.title = Products.all[imageOnRight].name;
+  Products.all[imageOnRight].views++;
+}
+
+imgSection.addEventListener('click', clickImages);
+
+function clickImages(event) {
+
+
+  if (event.target.id !== 'images') {
+
+    if (trials < 10) {
+      trials++;
+      render();
+      if (event.target.id === leftImage.id) {
+        Products.all[imageOnLeft].votes++;
+
+      } else if (event.target.id === centerImage.id) {
+        Products.all[imageOnCenter].votes++;
+      }
+      else {
+        Products.all[imageOnRight].votes++;
+      }
+    }
+  }
 }
 
 
-let buttonClick  = 0;
-document.getElementById('VRB').addEventListener('click', createList);
-function createList()
-{
-  if(buttonClick>0)
-    return ;
-  const ulElement = document.createElement('ul');
-  document.getElementById('footer').appendChild(ulElement);
-  for(let j =0 ; j<Presentation.all.length ; j++)
-  {
-    const liElement = document.createElement('li');
-    ulElement.appendChild(liElement);
-    liElement.textContent = `${Presentation.all[j].imageName} had ${Presentation.all[j].votes} votes, and was seen ${Presentation.all[j].views} times.`;
+buttonResult.addEventListener('click', resultbutton );
+
+function resultbutton() {
+
+  let listImages = document.getElementById('listOfProducts');
+  for (let i = 0; i < Products.all.length; i++) {
+    votesArr.push(Products.all[i].votes);
+    viewsArr.push(Products.all[i].views);
+    let liEl = document.createElement('li');
+    listImages.appendChild(liEl);
+    liEl.textContent = `${Products.all[i].name} had ${Products.all[i].votes} votes, and was seen ${Products.all[i].views} times.`
   }
-  buttonClick++;
+  buttonResult.removeEventListener('click', resultbutton);
+  chartRender();
+}
+
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+render();
+Products.all[imageOnLeft].views--;
+Products.all[imageOnCenter].views--;
+Products.all[imageOnRight].views--;
+
+
+function chartRender() {
+  let ctx = document.getElementById('dataChart').getContext('2d');
+  let chart = new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+      labels: images,
+      datasets: [{
+        label: '# Votes',
+        backgroundColor: 'red',
+        borderColor: 'red',
+        data: votesArr
+      },
+      {
+        label: '# Views',
+        backgroundColor: 'black',
+        borderColor: 'black',
+        data: viewsArr
+      }]
+    },
+  
+    options: {}
+  });
+
 }
 
