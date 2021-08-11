@@ -22,6 +22,8 @@ function Products(name) {
 }
 Products.all = [];
 
+obtainData();
+
 
 for (let j = 0; j < images.length; j++) {
   new Products(images[j]);
@@ -60,6 +62,8 @@ function render() {
   rightImg.alt = Products.all[imageOnRight].name;
   rightImg.title = Products.all[imageOnRight].name;
   Products.all[imageOnRight].views++;
+
+  localStorage.data = JSON.stringify(  Products.all );
 }
 
 imgSection.addEventListener('click', clickImages);
@@ -138,6 +142,19 @@ function chartRender() {
     options: {}
   });
 
+}
+
+function obtainData() {
+  if( localStorage.data ) {
+    let data = JSON.parse( localStorage.data );
+    for( let j = 0; j < data.length; j++ ) {
+      new  Products( data[j].name, data[j].image, data[j].views, data[j].votes );
+    }
+  } else {
+    for( let j = 0; j < images.length; j++ ) {
+      new Products( images[j].split( '.' )[0], images[j] );
+    }
+  }
 }
 
 
