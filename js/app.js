@@ -23,8 +23,8 @@ function Products(name) {
 Products.all = [];
 
 
-for (let i = 0; i < images.length; i++) {
-  new Products(images[i]);
+for (let j = 0; j < images.length; j++) {
+  new Products(images[j]);
 }
 
 
@@ -72,10 +72,10 @@ function clickImages(event) {
     if (trials < 10) {
       trials++;
       render();
-      if (event.target.id === leftImage.id) {
+      if (event.target.id === leftImg.id) {
         Products.all[imageOnLeft].votes++;
 
-      } else if (event.target.id === centerImage.id) {
+      } else if (event.target.id === centerImg.id) {
         Products.all[imageOnCenter].votes++;
       }
       else {
@@ -91,12 +91,12 @@ buttonResult.addEventListener('click', resultbutton );
 function resultbutton() {
 
   let listImages = document.getElementById('listOfProducts');
-  for (let i = 0; i < Products.all.length; i++) {
-    votesArr.push(Products.all[i].votes);
-    viewsArr.push(Products.all[i].views);
+  for (let j = 0; j < Products.all.length; j++) {
+    votesArr.push(Products.all[j].votes);
+    viewsArr.push(Products.all[j].views);
     let liEl = document.createElement('li');
     listImages.appendChild(liEl);
-    liEl.textContent = `${Products.all[i].name} had ${Products.all[i].votes} votes, and was seen ${Products.all[i].views} times.`
+    liEl.textContent = `${Products.all[j].name} had ${Products.all[j].votes} votes, and was seen ${Products.all[j].views} times.`
   }
   buttonResult.removeEventListener('click', resultbutton);
   chartRender();
@@ -111,6 +111,8 @@ Products.all[imageOnCenter].views--;
 Products.all[imageOnRight].views--;
 
 
+
+
 function chartRender() {
   let ctx = document.getElementById('dataChart').getContext('2d');
   let chart = new Chart(ctx, {
@@ -121,14 +123,14 @@ function chartRender() {
       labels: images,
       datasets: [{
         label: '# Votes',
-        backgroundColor: 'red',
-        borderColor: 'red',
+        backgroundColor: 'yellow',
+        borderColor: 'yellow',
         data: votesArr
       },
       {
         label: '# Views',
-        backgroundColor: 'black',
-        borderColor: 'black',
+        backgroundColor: 'blue',
+        borderColor: 'blue',
         data: viewsArr
       }]
     },
@@ -137,4 +139,16 @@ function chartRender() {
   });
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
