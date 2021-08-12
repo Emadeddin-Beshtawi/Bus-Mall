@@ -63,7 +63,7 @@ function render() {
   rightImg.title = Products.all[imageOnRight].name;
   Products.all[imageOnRight].views++;
 
-  localStorage.data = JSON.stringify(  Products.all );
+  localStorage.data = JSON.stringify(Products.all);
 }
 
 imgSection.addEventListener('click', clickImages);
